@@ -1,0 +1,39 @@
+version: '3'
+services:
+  srv:
+    image: srv
+    container_name: srv
+    build:
+      context: ./server
+
+    environment:
+      DB_USER: root
+      DB_PASSWORD: 12345
+      DB_NAME: workers
+      DB_HOST: db
+
+    depends_on:
+      - db
+    ports:
+      - "5000:5000"
+
+  db:
+    container_name: db
+    image: db
+    build:
+      context: ./db
+
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345
+      MYSQL_DATABASE: workers
+
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+
+volumes:
+  mysql-data:
+    driver: local
+
